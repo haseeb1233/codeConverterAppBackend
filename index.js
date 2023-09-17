@@ -43,7 +43,6 @@ app.get("/auth/github", async (req, res) => {
       })
   }).then((res) => res.json())
 
-  console.log(accessToken)
   const user = await fetch("https://api.github.com/user", {
           headers : {
               Authorization : `Bearer ${accessToken.access_token}`
@@ -63,9 +62,9 @@ app.get("/auth/github", async (req, res) => {
   .catch((err) => console.log(err))
 
   console.log(useremailis)
-
+   res.write(accessToken)
   res.redirect("https://dainty-sundae-e18578.netlify.app/")
-  res.json(accessToken)
+
 })
 
 
