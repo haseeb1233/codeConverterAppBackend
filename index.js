@@ -12,6 +12,9 @@ app.use(cors())
 const apiKey =process.env.API_KEY
 const openaiEndpoint=process.env.OPENAI_URL
 
+app.get("/",(req,res)=>{
+  res.send("Welcome To code Converter app")
+})
 
 // Function to interact with ChatOpenAI
 
