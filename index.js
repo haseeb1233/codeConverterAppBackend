@@ -1,5 +1,6 @@
 require("dotenv").config()
 const express = require('express');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const axios = require('axios');
 const cors=require("cors")
 const app=express()
@@ -14,6 +15,47 @@ const openaiEndpoint=process.env.OPENAI_URL
 
 app.get("/",(req,res)=>{
   res.send("Welcome To code Converter app")
+})
+
+// github oauth
+
+app.get("/auth/github", async (req, res) => {
+  const {code} = req.query
+  console.log(code)
+  const accessToken = await fetch("https://github.com/login/oauth/access_token", {
+      method : "POST",
+      headers : {
+          Accept : "application/json",
+          "content-type" : "application/json"
+      },
+      body : JSON.stringify({
+          client_id : client_id,
+          client_secret : client_secret,
+          code
+      })
+  }).then((res) => res.json())
+
+  const user = await fetch("https://api.github.com/user", {
+          headers : {
+              Authorization : `Bearer ${accessToken.access_token}`
+          }
+  })
+  .then((res) => res.json())
+  .catch((err) => console.log(err))
+
+  console.log(user)
+
+  const useremailis = await fetch("https://api.github.com/user/emails", {
+      headers : {
+          Authorization : `Bearer ${accessToken.access_token}`
+      }
+  })
+  .then((res) => res.json())
+  .catch((err) => console.log(err))
+
+  console.log(useremailis)
+
+  res.send("Sign in with Github successfull")
 })
 
 // Function to interact with ChatOpenAI
