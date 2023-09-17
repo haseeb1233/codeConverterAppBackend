@@ -70,35 +70,35 @@ app.get("/auth/github", async (req, res) => {
 
 
 // github integration
-app.post('/api/push-to-github', async (req, res) => {
-  try {
-    const { repoOwner, repoName, branchName, code,path,Commit_message} = req.body;
+// app.post('/api/push-to-github', async (req, res) => {
+//   try {
+//     const { repoOwner, repoName, branchName, code,path,Commit_message} = req.body;
 
-    // Create a new branch in the repository
-    // await octokit.git.createRef({
-    //   owner: repoOwner,
-    //   repo: repoName,
-    //   ref: `refs/heads/${branchName}`,
-    //   sha: 'base_sha', // Replace with the base SHA for the branch
-    // });
+//     // Create a new branch in the repository
+//     // await octokit.git.createRef({
+//     //   owner: repoOwner,
+//     //   repo: repoName,
+//     //   ref: `refs/heads/${branchName}`,
+//     //   sha: 'base_sha', // Replace with the base SHA for the branch
+//     // });
 
     
-    // Push code to the newly created branch
-    await octokit.repos.createOrUpdateFileContents({
-      owner: repoOwner,
-      repo: repoName, 
-      path: path, // Replace with the file path
-      message: Commit_message,
-      content: Buffer.from(code).toString('base64'),
-      branch: branchName,
-    });
+//     // Push code to the newly created branch
+//     await octokit.repos.createOrUpdateFileContents({
+//       owner: repoOwner,
+//       repo: repoName, 
+//       path: path, // Replace with the file path
+//       message: Commit_message,
+//       content: Buffer.from(code).toString('base64'),
+//       branch: branchName,
+//     });
 
-    res.json({ success: true });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'An error occurred while pushing to GitHub' });
-  }
-});
+//     res.json({ success: true });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'An error occurred while pushing to GitHub' });
+//   }
+// });
 // Function to interact with ChatOpenAI
 
 
