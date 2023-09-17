@@ -55,7 +55,7 @@ app.get("/auth/github", async (req, res) => {
 
   console.log(useremailis)
 
-  res.send("Sign in with Github successfull")
+  res.redirect("https://dainty-sundae-e18578.netlify.app/")
 })
 
 // Function to interact with ChatOpenAI
