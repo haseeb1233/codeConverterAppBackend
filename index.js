@@ -1,7 +1,7 @@
 require("dotenv").config()
 const express = require('express');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-
+const { Octokit } = require('@octokit/rest');
 const axios = require('axios');
 const cors=require("cors")
 const app=express()
@@ -13,6 +13,10 @@ app.use(cors())
 
 const apiKey =process.env.API_KEY
 const openaiEndpoint=process.env.OPENAI_URL
+const octokit = new Octokit({
+  auth: process.env.Access_Token,
+  request: { fetch },
+});
 
 app.get("/",(req,res)=>{
   res.send("Welcome To code Converter app")
@@ -58,6 +62,39 @@ app.get("/auth/github", async (req, res) => {
 
   res.redirect("https://dainty-sundae-e18578.netlify.app/")
 })
+
+// github integration
+app.post('/api/push-to-github', async (req, res) => {
+  try {
+    const { repoOwner, repoName, branchName, code,path,Commit_message} = req.body;
+
+    // Create a new branch in the repository
+    // await octokit.git.createRef({
+    //   owner: repoOwner,
+    //   repo: repoName,
+    //   ref: `refs/heads/${branchName}`,
+    //   sha: 'base_sha', // Replace with the base SHA for the branch
+    // });
+
+
+    // Push code to the newly created branch
+    await octokit.repos.createOrUpdateFileContents({
+      owner: repoOwner,
+      repo: repoName, 
+      path: path, // Replace with the file path
+      message: Commit_message,
+      content: Buffer.from(code).toString('base64'),
+      branch: branchName,
+    });
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while pushing to GitHub' });
+  }
+});
+
+
 
 // Function to interact with ChatOpenAI
 
