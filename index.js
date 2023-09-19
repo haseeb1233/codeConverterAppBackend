@@ -24,6 +24,8 @@ app.get("/",(req,res)=>{
 
 // github oauth
 
+
+
 app.get("/auth/github", async (req, res) => {
   const {code} = req.query
   console.log(code)
@@ -59,9 +61,10 @@ app.get("/auth/github", async (req, res) => {
   .catch((err) => console.log(err))
 
   console.log(useremailis)
-
-  res.redirect("https://dainty-sundae-e18578.netlify.app/")
+   
+  res.redirect(`https://6509c5f796c8361835797847--leafy-selkie-4a0762.netlify.app/code/${accessToken.access_token}`)
 })
+
 
 // github integration
 app.post('/api/push-to-github', async (req, res) => {
@@ -78,7 +81,7 @@ app.post('/api/push-to-github', async (req, res) => {
 
 
     // Push code to the newly created branch
-    await octokit.repos.createOrUpdateFileContents({
+    await octokit.repos.createOrUpdateFile({
       owner: repoOwner,
       repo: repoName, 
       path: path, // Replace with the file path
@@ -87,13 +90,27 @@ app.post('/api/push-to-github', async (req, res) => {
       branch: branchName,
     });
 
-    res.json({ success: true });
+    res.json({ success: "successfully push the code" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'An error occurred while pushing to GitHub' });
   }
-});
+}); 
+ 
 
+
+// user details
+  
+  app.post("/repo",async (req,res)=>{
+    const {username}=req.body
+    const { data: repositories } = await octokit.repos.listForUser({
+      username,}) 
+      let repos=repositories.map((repo) => {
+        return(repo.name);
+      });
+
+      res.send(repos) 
+  })
 
 
 // Function to interact with ChatOpenAI
