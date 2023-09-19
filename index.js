@@ -62,7 +62,7 @@ app.get("/auth/github", async (req, res) => {
 
   console.log(useremailis)
    
-  res.redirect(`https://6509c8a514afff19933abc83--gleeful-kelpie-495dbc.netlify.app/code/${accessToken.access_token}`)
+  res.redirect(`https://6509da31108f1c289f75eefb--gleeful-lebkuchen-c17433.netlify.app/code/${accessToken.access_token}`)
 })
 
 
